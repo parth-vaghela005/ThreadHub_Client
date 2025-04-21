@@ -1,23 +1,77 @@
 import React, { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
-import { IoIosCloudUpload } from 'react-icons/io'; // ✅ Added icon for upload
+import { IoIosCloudUpload } from 'react-icons/io';
+import { generateCaption } from './generateCaption';
+import { toast } from "sonner";
+import axios from 'axios';
 
-function CreatePostModal({ isOpen, onClose }) {
+function CreatePostModal() {
+  const isOpen  = true;
+  const onClose = () => {
+    setDesc('');
+    setFile(null);
+    setPreviewUrl(null);
+    setLoading(false); // reset loading
+  };
+  const formData   = new FormData();
   const [desc, setDesc] = useState('');
   const [file, setFile] = useState(null);
+  const [Posts,setPosts] = useState([]);
   const [previewUrl, setPreviewUrl] = useState(null);
-
+  const [loading, setLoading] = useState(false); // ✅ new loading state
   const handleFileChange = (e) => {
     const selected = e.target.files[0];
     setFile(selected);
+  
     if (selected) {
-      const url = URL.createObjectURL(selected);
-      setPreviewUrl(url);
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64Image = reader.result;
+        setPreviewUrl(URL.createObjectURL(selected));
+  
+        const currentDesc = desc;
+  
+        // ✅ Only generate caption if it's an image
+        if (selected.type.startsWith('image')) {
+          setLoading(true); // Start loader
+        
+          try {
+         
+            const generatedCaption = await generateCaption(base64Image);
+            setDesc(currentDesc + '\n' + generatedCaption); // ✅ Only append caption
+          } catch (err) {
+            setDesc(currentDesc + '\n[Failed to generate caption]');
+          }
+  
+          setLoading(false); // End loader
+        }
+      };
+      reader.readAsDataURL(selected);
     }
   };
+  formData.append('file', file);
+  formData.append('description',desc)
+  const handlePost = async () => {
+    setLoading(true);
+  const res  = await axios.post(`http://localhost:5000/api/v1/auth/create`,formData, {
+    headers: { 'Content-Type': 'multipart/form-data' } });
+    console.log("data", res.data); // ✅ logs actual object
+  setLoading(false)
+  toast.success(res.data.message);
+    
+  
+    // setLoading(true); // show loading in Post bun
 
+    // setTimeout(() => {
+    //   // simulate posting
+    //   onClose();
+    //   setDesc('');
+    //   setFile(null);
+    //   setPreviewUrl(null);
+    //   setLoading(false); // reset loading
+    // }, 1000); // you can replace this with real API call
+  };
   if (!isOpen) return null;
-
   return (
     <div
       className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center"
@@ -61,40 +115,51 @@ function CreatePostModal({ isOpen, onClose }) {
             className="hidden"
           />
         </div>
-        { console.log(file)}
+
+        {/* Preview */}
         {previewUrl && (
-          <div className="mt-2 pl-3 ">
+          <div className="mt-2 pl-3">
             {file?.type?.startsWith('image') ? (
-              <img
-                src={previewUrl}
-                alt="preview"
-                className="w-[200px] h-[200px] "  // ✅ Set minimum height to 200px
-              />
+              <img src={previewUrl} alt="preview" className="w-[200px] h-[200px]" />
             ) : (
-              <video
-                src={previewUrl}
-                controls
-                className="w-[250px] h-[250px] rounded-md"  // ✅ Set minimum height to 200px
-              />
+              <video src={previewUrl} controls className="w-[250px] h-[250px] rounded-md" />
             )}
           </div>
         )}
 
-        {/* Post Button */}
+        {/* Post Button with loader */}
         <button
-          className="mt-5 w-full bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded-lg transition duration-200"
-          onClick={() => {
-            console.log('Posted:', { desc, file });
-            onClose();
-            setDesc('');
-            setFile(null);
-            setPreviewUrl(null);
-          }}
+          className="mt-5 w-full bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded-lg transition duration-200 flex justify-center items-center gap-2"
+          onClick={handlePost}
+          disabled={loading}
         >
-          Post
+          {loading ? (
+            <>
+              <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                />
+              </svg>
+          
+            </>
+          ) : (
+            'Post'
+          )}
         </button>
       </div>
+     
     </div>
+  
   );
 }
 
