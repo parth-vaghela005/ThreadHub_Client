@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom'
 import CreatePostModal from '../Pages/CreatePostModal'
 
 function Sidebar() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  // const [isModalOpen, setIsModalOpen] = useState(false)
 
   const user = {
     username: "Parth_Vaghela09",
@@ -43,9 +43,11 @@ function Sidebar() {
           </Link>
 
           {/* Post Button */}
-          <div onClick={() => setIsModalOpen(true)}>
+          <Link   to={`/create-post`}>
+          {/* <div onClick={() => setIsModalOpen(true)}> */}
             <MenuItem icon={<CirclePlus size={30} />} label="Post" />
-          </div>
+          {/* </div> */}
+          </Link>
 
           <MenuItem icon={<CiBookmark size={30} />} label="Bookmarks" />
         </div>
@@ -69,7 +71,7 @@ function Sidebar() {
       </div>
 
       {/* Modal */}
-      <CreatePostModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      {/* <CreatePostModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} /> */}
     </>
   )
 }
