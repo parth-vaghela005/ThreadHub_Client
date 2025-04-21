@@ -6,7 +6,11 @@ import {
 } from 'react-icons/md';
 import { FaRegCommentDots } from 'react-icons/fa';
 
-function Thread() {
+function Thread({post}) {
+  console.log("post", post);
+  
+  // console.log(post?.author?.username , "from thred");
+  
   const file = {
     type: 'video', // or 'img'
     fetch: true,
@@ -28,15 +32,21 @@ function Thread() {
             </div>
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
-                <span className="text-white font-bold text-[18px]">username</span>
-                <span className="text-[#71767b]">@username</span>
+                <span className="text-white font-bold text-[18px]">{
+                  post?.author?.username || "Anonymous"
+                  }
+                </span>
+                <span className="text-[#71767b]">
+  @{post?.author?.username || 'Anonymous'}
+</span>
+
                 <span className="text-[#71767b] flex items-center gap-1">· 1h</span>
               </div>
               <div className="text-white whitespace-pre-line pt-1">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab
-                temporibus odio excepturi magni itaque dolorem non ad
-                exercitationem, quaerat praesentium incidunt quam adipisci fuga
-                quos nisi deleniti esse quidem rem.
+               {
+                post?.description || "No description available."
+          
+               }
               </div>
             </div>
           </div>
@@ -51,18 +61,18 @@ function Thread() {
         </div>
 
         {/* File Preview */}
-        {file.fetch && (
+        {post.mediaUrl && (
           <div className="main px-4 w-[80%] mx-auto pb-4">
             <div className="w-full rounded-md overflow-hidden">
-              {file.type === 'img' ? (
+              {post.mediaType === 'image' ? (
                 <img
-                  src={file.src}
+                  src={post.mediaUrl}
                   alt=""
                   className="w-full max-h-96 object-cover"
                 />
               ) : (
                 <video
-                  src={file.src}
+                  src={post.mediaUrl}
                   controls
                   className="w-full max-h-[500px] rounded-md"
                 />
