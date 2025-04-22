@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { IoIosCloudUpload } from 'react-icons/io';
-import { generateCaption } from './generateCaption';
+// import { generateCaption } from './generateCaption';
 import { toast } from "sonner";
 import axios from 'axios';
-
+import { useNavigate } from 'react-router-dom';
 function CreatePostModal() {
+  const navigate = useNavigate();
   const isOpen  = true;
   const onClose = () => {
     setDesc('');
@@ -37,7 +38,7 @@ function CreatePostModal() {
         
           try {
          
-            const generatedCaption = await generateCaption(base64Image);
+            // const generatedCaption = await generateCaption(base64Image);
             setDesc(currentDesc + '\n' + generatedCaption); // ✅ Only append caption
           } catch (err) {
             setDesc(currentDesc + '\n[Failed to generate caption]');
@@ -58,8 +59,7 @@ function CreatePostModal() {
     console.log("data", res.data); // ✅ logs actual object
   setLoading(false)
   toast.success(res.data.message);
-    
-  
+  navigate('/home')
     // setLoading(true); // show loading in Post bun
 
     // setTimeout(() => {

@@ -23,9 +23,9 @@ function Home() {
   return (
 
     <>
-    <h1 className='text-white'>
+    {/* <h1 className='text-white'>
       Home
-    </h1>
+    </h1> */}
   { 
     
 

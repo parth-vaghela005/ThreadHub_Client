@@ -1,22 +1,15 @@
 import React from 'react';
+import { formatDistanceToNow } from 'date-fns';
+// import { format, formatDistanceToNowStrict, differenceInHours } from 'date-fns';
 import {
   MdOutlineDeleteOutline,
   MdFavoriteBorder,
   MdOutlineBookmarkBorder,
 } from 'react-icons/md';
 import { FaRegCommentDots } from 'react-icons/fa';
-
+import formatPostTime from '../Pages/formatPostTime.js';
 function Thread({post}) {
-  console.log("post", post);
-  
-  // console.log(post?.author?.username , "from thred");
-  
-  const file = {
-    type: 'video', // or 'img'
-    fetch: true,
-    src: '/select.mp4',
-    // src:"https://pbs.twimg.com/media/Go5lsojWwAAWln8?format=jpg&name=small"
-  };
+  const url  = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuNhTZJTtkR6b-ADMhmzPvVwaLuLdz273wvQ&s'
   return (
     <div className="w-full max-w-[700px] text-white border-gray-600 mx-auto">
       <div className="thread border border-gray-800  shadow-sm">
@@ -25,7 +18,7 @@ function Thread({post}) {
           <div className="userinfo flex gap-3">
             <div className="min-w-[50px] min-h-[50px] h-[50px] w-[50px] border-4 border-black rounded-full overflow-hidden">
               <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuNhTZJTtkR6b-ADMhmzPvVwaLuLdz273wvQ&s"
+                src={post.author?.profilePic || url}
                 className="h-full w-full object-cover"
                 alt="user"
               />
@@ -33,14 +26,14 @@ function Thread({post}) {
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
                 <span className="text-white font-bold text-[18px]">{
-                  post?.author?.username || "Anonymous"
+                  post?.author?.name || "Anonymous"
                   }
                 </span>
                 <span className="text-[#71767b]">
   @{post?.author?.username || 'Anonymous'}
 </span>
 
-                <span className="text-[#71767b] flex items-center gap-1">· 1h</span>
+                <span className="text-[#71767b] flex items-center gap-1">·{formatPostTime(post.createdAt)}</span>
               </div>
               <div className="text-white whitespace-pre-line pt-1">
                {
@@ -91,7 +84,7 @@ function Thread({post}) {
                 className="group-hover:text-blue-400"
               />
             </div>
-            <span className="text-sm">24</span>
+            <span className="text-sm">{post.comments.length}</span>
           </div>
 
           {/* Like */}
@@ -102,7 +95,7 @@ function Thread({post}) {
                 className="group-hover:text-pink-500"
               />
             </div>
-            <span className="text-sm">56</span>
+            <span className="text-sm">{post.likes.length}</span>
           </div>
 
           {/* Bookmark */}
