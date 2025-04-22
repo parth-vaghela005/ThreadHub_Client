@@ -26,7 +26,9 @@ const profileUrl = `/${user.username.replaceAll(" ", "_").toLowerCase()}/profile
     )
   }
 const HandleLogout = async() =>{
-  const res  = await axios.get('http://localhost:5000/api/v1/auth/logout')
+  const res  = await axios.get('http://localhost:5000/api/v1/auth/logout',{
+    withCredentials: true,
+  })
   if(res.data.success){
     dispatch(logout())
     toast.success(res.data.message)

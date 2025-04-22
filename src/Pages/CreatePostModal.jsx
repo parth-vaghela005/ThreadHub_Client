@@ -54,8 +54,12 @@ function CreatePostModal() {
   formData.append('description',desc)
   const handlePost = async () => {
     setLoading(true);
-  const res  = await axios.post(`http://localhost:5000/api/v1/auth/create`,formData, {
-    headers: { 'Content-Type': 'multipart/form-data' } });
+  const res  = await axios.post(`http://localhost:5000/api/v1/auth/create`,formData,
+    { withCredentials: true,
+       headers: { 
+        'Content-Type': 'multipart/form-data'
+       }
+       });
     console.log("data", res.data); // ✅ logs actual object
   setLoading(false)
   toast.success(res.data.message);
