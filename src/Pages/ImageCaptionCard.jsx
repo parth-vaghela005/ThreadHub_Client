@@ -36,7 +36,7 @@
 //         },
 //         {
 //           headers: {
-//             Authorization: `Bearer  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`, // 🔐 Replace with your key
+//             Authorization: `Bearer 
 //             "Content-Type": "application/json",
 //           },
 //         }
