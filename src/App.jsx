@@ -8,12 +8,8 @@
   import SignupForm from '../src/Pages/SignupForm'
 import LoginForm from '../src/Pages/LoginForm'
 import { useSelector } from 'react-redux';
-
-
+import CommentSection from '../src/Pages/CommentSection'
   function App() {
-    let { user, isLoggedin } = useSelector((state) => state.author);
-    console.log("isLoggedin" , isLoggedin);
-    console.log("user" , user);
     return (
       <Routes>
         <Route path="/" element={<MainLayout />}>
@@ -22,15 +18,11 @@ import { useSelector } from 'react-redux';
           <Route path="create-post" element={<CreatePostModal />} />
           <Route path="/:username/profile" element={<Profile />} />
           <Route path="/generate" element={<ImageCaptionCard />} />
-          
-          
-
-        </Route>
+          <Route path="/post/:Id" element={<CommentSection />} />
+          </Route>
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/login" element={<LoginForm />} />
-        
-      </Routes>
+        </Routes>
     )
   }
-
-  export default App
+    export default App
