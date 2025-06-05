@@ -1,21 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { MdHomeFilled } from 'react-icons/md'
 import { Search } from 'lucide-react'
 import { CgProfile } from "react-icons/cg"
 import { CiBookmark } from "react-icons/ci"
 import { CirclePlus } from 'lucide-react'
-import { Link } from 'react-router-dom'
-import { LogOut } from 'lucide-react';
-import CreatePostModal from '../Pages/CreatePostModal'
+import { Link, useNavigate } from 'react-router-dom'
+import { LogOut } from 'lucide-react';        
 import { toast } from 'sonner'
 import { logout } from '../redux/slices/authSlice.js'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios  from 'axios'
 function Sidebar() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = {
-    username: "Parth_Vaghela09",
-  }
+ const user = useSelector((state) => state.author.user);
 const profileUrl = `/${user.username.replaceAll(" ", "_").toLowerCase()}/profile`
  function MenuItem({ icon, label }) {
     return (
@@ -32,8 +30,10 @@ const HandleLogout = async() =>{
   if(res.data.success){
     dispatch(logout())
     toast.success(res.data.message)
+    navigate('/login')
   }    
 }
+
   return (
     <>
       <div className="sidebar fixed left-0 top-0 flex flex-col justify-between h-screen w-64 border-r border-gray-800 text-white p-6">
@@ -51,18 +51,21 @@ const HandleLogout = async() =>{
           <Link   to={`/create-post`}>
             <MenuItem icon={<CirclePlus size={30} />} label="Post" />
           </Link>
-       <MenuItem icon={<CiBookmark size={30} />} label="Bookmarks" />
+          {/* <div className="bg-blue-500  text-white"> */}
+          <MenuItem icon={<CiBookmark  className='text-pink-300 bg-pink-200 w-6 h-6" ' size={30} />} label="Bookmarks" />
+      {/* </div> */}
+      
         </div>
         <div className="bottom mt-auto flex flex-row gap-3 items-center hover:bg-gray-800 transition-all duration-150 rounded-full cursor-pointer">
       {/* Profile Image Container */}
       <div className="flex items-center gap-4 p-3 rounded-full cursor-pointer">
-        <div className="h-[50px] w-[50px] rounded-full">
+        {/* <div className="h-[50px] w-[50px] rounded-full">
           <img
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuNhTZJTtkR6b-ADMhmzPvVwaLuLdz273wvQ&s"
             alt="profile"
             className="h-full w-full rounded-full object-cover"
           />
-        </div>
+        </div> */}
       </div>
       <div className="flex flex-col gap-0">
         <button

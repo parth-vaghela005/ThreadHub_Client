@@ -9,6 +9,7 @@
 import LoginForm from '../src/Pages/LoginForm'
 import { useSelector } from 'react-redux';
 import CommentSection from '../src/Pages/CommentSection'
+import EditProfile from '../src/Pages/EditProfile'
   function App() {
     return (
       <Routes>
@@ -17,6 +18,7 @@ import CommentSection from '../src/Pages/CommentSection'
           <Route path="home" element={<Home />} />    
           <Route path="create-post" element={<CreatePostModal />} />
           <Route path="/:username/profile" element={<Profile />} />
+          <Route path="/profile/EditProfile" element={<EditProfile />} />
           <Route path="/generate" element={<ImageCaptionCard />} />
           <Route path="/post/:Id" element={<CommentSection />} />
           </Route>
