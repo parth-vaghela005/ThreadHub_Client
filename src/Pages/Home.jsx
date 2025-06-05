@@ -20,9 +20,9 @@ if(loading)return <h1>Loading...</h1>
      <>
       { 
     posts.map((post,index) => (
-    <Link to={`/post/${post._id}`} key={post._id}>
+    // <Link to={`/post/${post._id}`} key={post._id}>
       <Thread post={post} display={true} />
-    </Link>
+    // </Link>
     ))
    }  
  </>
