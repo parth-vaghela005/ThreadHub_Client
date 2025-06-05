@@ -70,6 +70,7 @@ const navigate  = useNavigate()
         if(result.success){
             toast.success(result.message);
             dispatch(login({ user: result.user }));
+            
             navigate("/home")
         }
       } catch (err) {
