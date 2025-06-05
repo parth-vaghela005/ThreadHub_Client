@@ -9,18 +9,14 @@ import { IoIosArrowRoundBack } from 'react-icons/io';
 function CommentSection() {
   const [post, setPost] = useState(null);
   const { Id } = useParams();
-
   const fetchPost = async () => {
     const result = await GetPostById(Id);
     setPost(result);
   };
-
   useEffect(() => {
     fetchPost();
   }, [Id]);
-
   if (!post) return <p>Loading...</p>;
-
   return (
     <>
       <div className="header flex gap-7 items-center px-3 py-3 cursor-pointer">
@@ -31,9 +27,7 @@ function CommentSection() {
           <p className="text-[20px] text-white font-bold">Post</p>
         </div>
       </div>
-
-      <div><Thread post={post} display={true} /></div>
-
+      <div><Thread post={post} display={false} /></div>
       <div className="mt-5">
         <ReplyBox username={post?.author?.username} postId={Id} refreshPost={fetchPost} />
       </div>
@@ -46,5 +40,4 @@ function CommentSection() {
     </>
   );
 }
-
 export default CommentSection;
